@@ -134,7 +134,6 @@ def stop_error(dyn, threshold, reg=0.2):
             ),
             flush=True,
         )
-        dyn.max_steps = 0
 
 
 def main():

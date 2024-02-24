@@ -5,8 +5,7 @@
 ###########################################################################################
 
 import argparse
-import ast
-from typing import List, Optional, Union
+from typing import Optional
 
 
 def build_default_arg_parser() -> argparse.ArgumentParser:
@@ -107,6 +106,18 @@ def build_default_arg_parser() -> argparse.ArgumentParser:
         default=5,
     )
     parser.add_argument(
+        "--pair_repulsion",
+        help="use amsgrad variant of optimizer",
+        action="store_true",
+        default=False,
+    )
+    parser.add_argument(
+        "--distance_transform",
+        help="use amsgrad variant of optimizer",
+        action="store_true",
+        default=False,
+    )
+    parser.add_argument(
         "--interaction",
         help="name of interaction block",
         type=str,
@@ -131,10 +142,7 @@ def build_default_arg_parser() -> argparse.ArgumentParser:
         "--max_ell", help=r"highest \ell of spherical harmonics", type=int, default=3
     )
     parser.add_argument(
-        "--correlation",
-        help="correlation order at each layer",
-        type=listint_or_int,
-        default=3,
+        "--correlation", help="correlation order at each layer", type=int, default=3
     )
     parser.add_argument(
         "--num_interactions", help="number of interactions", type=int, default=2
@@ -289,6 +297,7 @@ def build_default_arg_parser() -> argparse.ArgumentParser:
             "stress",
             "dipole",
             "huber",
+            "universal",
             "energy_forces_dipole",
         ],
     )
@@ -424,6 +433,18 @@ def build_default_arg_parser() -> argparse.ArgumentParser:
         default=2048,
     )
     parser.add_argument(
+        "--foundation_model",
+        help="Path to the foundation model for transfer learning",
+        type=str,
+        default=None,
+    )
+    parser.add_argument(
+        "--foundation_model_readout",
+        help="Use readout of foundation model for transfer learning",
+        action="store_false",
+        default=True,
+    )
+    parser.add_argument(
         "--eval_interval", help="evaluate model every <n> epochs", type=int, default=2
     )
     parser.add_argument(
@@ -506,9 +527,3 @@ def check_float_or_none(value: str) -> Optional[float]:
                 f"{value} is an invalid value (float or None)"
             ) from None
         return None
-
-
-def listint_or_int(value: Union[str, int]) -> Union[List[int], int]:
-    if isinstance(value, str):
-        return ast.literal_eval(value)
-    return int(value)

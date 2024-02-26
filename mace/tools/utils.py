@@ -173,14 +173,14 @@ def load_foundations(
     indices_weights = [z_table.z_to_index(z) for z in new_z_table.zs]
     num_radial = model.radial_embedding.out_dim
     num_species = len(indices_weights)
-    model.node_embedding.linear.weight = torch.nn.Parameter(
-        model_foundations.node_embedding.linear.weight.view(
-            num_species_foundations, -1
-        )[indices_weights, :]
-        .flatten()
-        .clone()
-        / (num_species_foundations / num_species) ** 0.5
-    )
+    # model.node_embedding.linear.weight = torch.nn.Parameter(
+    #     model_foundations.node_embedding.linear.weight.view(
+    #         num_species_foundations, -1
+    #     )[indices_weights, :]
+    #     .flatten()
+    #     .clone()
+    #     / (num_species_foundations / num_species) ** 0.5
+    # )
 
     for i in range(int(model.num_interactions)):
         model.interactions[i].linear_up.weight = torch.nn.Parameter(
